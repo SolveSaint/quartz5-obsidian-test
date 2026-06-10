@@ -12,9 +12,6 @@ quartz-properties-collapse: false
 lang: en
 aliases:
   - Example Note
-cssclasses: []
-socialDescription: null
-socialImage: null
 published: 2026-06-09
 tags:
   - Example
