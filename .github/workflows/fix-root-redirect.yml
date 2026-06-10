@@ -1,0 +1,52 @@
+name: Fix Quartz root redirect
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/fix-root-redirect.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Disable AliasRedirects and remove placeholder permalinks
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          config = Path("quartz.config.yaml")
+          text = config.read_text(encoding="utf-8")
+          text = text.replace(
+              "  - source: github:quartz-community/alias-redirects\n    enabled: true\n",
+              "  - source: github:quartz-community/alias-redirects\n    enabled: false\n",
+          )
+          config.write_text(text, encoding="utf-8")
+
+          for path in Path("content").rglob("*.md"):
+              body = path.read_text(encoding="utf-8")
+              body = body.replace("permalink: null\n", "")
+              path.write_text(body, encoding="utf-8")
+          PY
+
+          git add quartz.config.yaml content
+          if git diff --cached --quiet; then
+            echo "No redirect fix changes to commit."
+            exit 0
+          fi
+          git commit -m "Fix Quartz root redirect generation"
+          git push origin main
