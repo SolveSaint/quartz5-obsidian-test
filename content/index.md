@@ -7,7 +7,7 @@ publish: true
 draft: false
 comments: false
 enableToc: true
-quartz-properties: true
+quartz-properties: false
 quartz-properties-collapse: false
 lang: en
 aliases:
@@ -25,8 +25,6 @@ tags:
   - GitHubPages
   - GettingStarted
 ---
-
-# Welcome
 
 This is a Quartz 5 website built from an Obsidian-compatible Markdown vault.
 
@@ -63,11 +61,11 @@ Useful requests include:
 
 The Markdown files in `/content` are the source of truth.
 
-## Frontmatter available in this site
+## Starter frontmatter rules
 
-Quartz uses YAML frontmatter at the top of Markdown files to control page metadata, publishing behavior, comments, table of contents behavior, aliases, CSS classes, and social previews.
+Quartz uses YAML frontmatter at the top of Markdown files to control metadata, publishing behavior, comments, table of contents behavior, aliases, CSS classes, and social previews.
 
-This site uses the full visible starter pattern for regular notes:
+Use this standard pattern for regular notes:
 
 ```yaml
 ---
@@ -93,6 +91,17 @@ tags:
 ---
 ```
 
+Important rules:
+
+- Keep `created` first and `updated` second so Obsidian date plugins can manage them predictably.
+- Put Quartz behavior fields such as `publish`, `draft`, `comments`, `enableToc`, and `quartz-properties` above `tags`.
+- Do not include `permalink` in standard generated frontmatter.
+- Add `permalink` only when a page needs a real custom URL.
+- Never use `permalink: /` on `content/index.md`; the homepage already publishes at the site root.
+- Do not repeat the page title as a Markdown `# Heading` when Quartz already renders the page title from frontmatter.
+- Use `quartz-properties: false` on public landing pages when the properties panel would clutter the design.
+- Use `comments: false` unless comments are intentionally configured for the site.
+
 Known fields used by this starter site:
 
 | Field | Purpose |
@@ -100,7 +109,7 @@ Known fields used by this starter site:
 | `created` | Creation date for the note. |
 | `updated` | Last updated date. This stays second for Obsidian date plugins. |
 | `description` | Page description for metadata, previews, and search. |
-| `title` | Page title. |
+| `title` | Page title rendered by Quartz. |
 | `publish` | Marks a page as publishable when explicit publishing is enabled. |
 | `draft` | Pages with `draft: true` are removed by the drafts filter. |
 | `comments` | Enables or disables comments when a comments provider is configured. |
@@ -108,15 +117,13 @@ Known fields used by this starter site:
 | `quartz-properties` | Controls whether the note properties panel is shown. |
 | `quartz-properties-collapse` | Controls whether the note properties panel starts collapsed. |
 | `lang` | Language code for the page. |
-| `permalink` | Custom URL path for non-homepage pages. |
 | `aliases` | Alternate names for link resolution. |
 | `cssclasses` | Page-specific CSS classes. |
 | `socialDescription` | Optional social-preview-specific description. |
 | `socialImage` | Optional social preview image. |
 | `published` | Publication date. |
 | `tags` | Page tags. |
-
-Homepage rule: `content/index.md` already becomes the site root, so the homepage should omit `permalink` entirely. Do not use `permalink: /` on the homepage.
+| `permalink` | Optional custom URL path. Omit it unless a custom path is needed. |
 
 For the full reference, see [[Quartz Guide/Frontmatter Reference]].
 
