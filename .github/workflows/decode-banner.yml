@@ -1,0 +1,157 @@
+name: Decode homepage banner
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/banner/quartz5-obsidian-test-banner.png.b64
+      - .github/workflows/decode-banner.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  decode-banner:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Decode and verify PNG banner
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          SRC=".github/banner/quartz5-obsidian-test-banner.png.b64"
+          OUT="quartz/static/quartz5-obsidian-test-banner.png"
+
+          if [ ! -f "$SRC" ]; then
+            echo "No banner base64 source found; nothing to decode."
+            exit 0
+          fi
+
+          mkdir -p quartz/static
+          base64 --decode "$SRC" > "$OUT"
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import struct
+          import zlib
+
+          path = Path("quartz/static/quartz5-obsidian-test-banner.png")
+          data = path.read_bytes()
+          sig = b"\x89PNG\r\n\x1a\n"
+          if not data.startswith(sig):
+              raise SystemExit("decoded file is missing PNG signature")
+
+          pos = len(sig)
+          width = height = None
+          seen_iend = False
+          while pos < len(data):
+              if pos + 8 > len(data):
+                  raise SystemExit("truncated PNG chunk header")
+              length = struct.unpack(">I", data[pos:pos+4])[0]
+              ctype = data[pos+4:pos+8]
+              pos += 8
+              if pos + length + 4 > len(data):
+                  raise SystemExit(f"truncated PNG chunk {ctype!r}")
+              chunk = data[pos:pos+length]
+              pos += length
+              crc_read = struct.unpack(">I", data[pos:pos+4])[0]
+              pos += 4
+              crc_calc = zlib.crc32(ctype + chunk) & 0xffffffff
+              if crc_read != crc_calc:
+                  raise SystemExit(f"bad CRC in PNG chunk {ctype!r}")
+              if ctype == b"IHDR":
+                  width, height = struct.unpack(">II", chunk[:8])
+              if ctype == b"IEND":
+                  seen_iend = True
+                  break
+
+          if not seen_iend:
+              raise SystemExit("PNG missing IEND chunk")
+          if pos != len(data):
+              raise SystemExit("extra trailing data after IEND")
+          if (width, height) != (1200, 64):
+              raise SystemExit(f"unexpected PNG dimensions: {(width, height)}")
+
+          print(f"valid PNG: {width}x{height}, {len(data)} bytes")
+          PY
+
+      - name: Restore homepage source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > content/index.md <<'EOF'
+          ---
+          title: quartz5-obsidian-test
+          ---
+
+          <img class="site-banner" src="static/quartz5-obsidian-test-banner.png" alt="quartz5-obsidian-test banner">
+
+          # quartz5-obsidian-test
+
+          This is a Quartz 5 test site for verifying an Obsidian-style publishing workflow on GitHub Pages.
+
+          ## Site identity
+
+          - Live site: https://solvesaint.github.io/quartz5-obsidian-test/
+          - Repository: https://github.com/SolveSaint/quartz5-obsidian-test
+          - Site title: `quartz5-obsidian-test`
+
+          ## Editing notes
+
+          Edit Markdown source files in the `content/` directory. The homepage source is `content/index.md`.
+
+          ## Publishing notes
+
+          Changes pushed to the `main` branch are built by GitHub Actions and published through GitHub Pages.
+
+          ## Basic frontmatter
+
+          Use ordinary YAML frontmatter at the top of notes:
+
+          ```yaml
+          ---
+          title: Example note
+          ---
+          ```
+
+          ## Content instructions
+
+          Keep public content focused on site-owner information and visible site content. Do not publish internal operator instructions, private deployment rules, or assistant workflow notes on this homepage.
+          EOF
+
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("content/index.md")
+          text = p.read_text(encoding="utf-8")
+          text = "\n".join(line[10:] if line.startswith("          ") else line for line in text.splitlines()) + "\n"
+          p.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Commit decoded banner
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git rm -f .github/banner/quartz5-obsidian-test-banner.png.b64 || true
+          git rm -f quartz/static/quartz5-obsidian-test-banner.svg || true
+
+          git add quartz/static/quartz5-obsidian-test-banner.png content/index.md
+          git add -u .github/banner quartz/static || true
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Install decoded PNG homepage banner"
+          git push
