@@ -43,11 +43,11 @@ jobs:
           npm ci
           npx quartz create --template obsidian --strategy new --baseUrl SolveSaint.github.io/quartz5-obsidian-test
 
-          mkdir -p content/Notes content/Attachments "content/Quartz Guide"
-          touch content/Attachments/.gitkeep
+          python3 - <<'PY'
+          from pathlib import Path
 
-          cat > README.md <<'EOF'
-# Quartz 5 Obsidian Test
+          files = {
+              "README.md": r'''# Quartz 5 Obsidian Test
 
 Live site: https://solvesaint.github.io/quartz5-obsidian-test/
 
@@ -80,10 +80,8 @@ Workflow:
 - `/content/Attachments` — recommended folder for images, PDFs, and other files
 - `/quartz` — Quartz engine, plugins, components, and styles
 - `/.github/workflows/deploy.yml` — GitHub Pages deployment workflow
-EOF
-
-          cat > content/index.md <<'EOF'
----
+''',
+              "content/index.md": r'''---
 created: 2026-06-09
 updated: 2026-06-09
 description: Start here to learn how this Quartz 5 site works, how to edit it with Obsidian, and how to publish updates through GitHub Pages.
@@ -174,10 +172,8 @@ Workflow:
 Start with:
 
 [[Notes/First Note]]
-EOF
-
-          cat > "content/Notes/First Note.md" <<'EOF'
----
+''',
+              "content/Notes/First Note.md": r'''---
 created: 2026-06-09
 updated: 2026-06-09
 description: A starter note demonstrating Obsidian wikilinks, Quartz metadata, and GitHub Pages publishing.
@@ -211,10 +207,8 @@ You can link back to the homepage with:
 [[index]]
 
 You can create new notes by adding Markdown files anywhere inside `/content`.
-EOF
-
-          cat > "content/Quartz Guide/Frontmatter Reference.md" <<'EOF'
----
+''',
+              "content/Quartz Guide/Frontmatter Reference.md": r'''---
 created: 2026-06-09
 updated: 2026-06-09
 description: Reference for the Quartz 5 frontmatter fields used by this starter site.
@@ -295,7 +289,17 @@ tags:
 | `socialImage` | Optional social preview image. |
 | `published` | Publication date. |
 | `tags` | Page tags. |
-EOF
+''',
+          }
+
+          for path, content in files.items():
+              target = Path(path)
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_text(content, encoding="utf-8")
+
+          Path("content/Attachments").mkdir(parents=True, exist_ok=True)
+          Path("content/Attachments/.gitkeep").write_text("", encoding="utf-8")
+          PY
 
           git add -A
 
