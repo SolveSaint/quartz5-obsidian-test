@@ -30,7 +30,7 @@ This site uses YAML frontmatter at the top of each Markdown file.
 
 Standard generated notes keep `created` first and `updated` second so Obsidian plugins can manage the updated date without moving the field.
 
-## Standard order
+## Standard order for regular notes
 
 ```yaml
 ---
@@ -57,6 +57,20 @@ tags:
 ---
 ```
 
+## Homepage exception
+
+`content/index.md` already becomes the site root.
+
+Do not add `permalink` to the homepage frontmatter.
+
+Do not use:
+
+```yaml
+permalink: /
+```
+
+That can create a root redirect artifact instead of the real homepage.
+
 ## Field meanings
 
 | Field | What it does |
@@ -72,7 +86,7 @@ tags:
 | `quartz-properties` | Controls whether the note properties panel is shown. |
 | `quartz-properties-collapse` | Controls whether the note properties panel starts collapsed. |
 | `lang` | Language code for the page. |
-| `permalink` | Custom URL path for the page. Use `/` only for the homepage. |
+| `permalink` | Custom URL path for non-homepage pages. Use `null` when unused. |
 | `aliases` | Alternate names for link resolution. |
 | `cssclasses` | Page-specific CSS classes. |
 | `socialDescription` | Optional social-preview-specific description. |
