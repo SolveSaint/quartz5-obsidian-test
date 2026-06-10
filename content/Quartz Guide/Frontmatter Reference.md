@@ -10,7 +10,6 @@ enableToc: true
 quartz-properties: true
 quartz-properties-collapse: false
 lang: en
-permalink: null
 aliases:
   - Quartz Frontmatter
   - Frontmatter Guide
@@ -45,7 +44,6 @@ enableToc: true
 quartz-properties: true
 quartz-properties-collapse: false
 lang: en
-permalink: null
 aliases: []
 cssclasses: []
 socialDescription: null

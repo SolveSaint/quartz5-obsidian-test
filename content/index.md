@@ -82,7 +82,6 @@ enableToc: true
 quartz-properties: true
 quartz-properties-collapse: false
 lang: en
-permalink: null
 aliases: []
 cssclasses: []
 socialDescription: null
