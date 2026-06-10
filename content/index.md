@@ -63,6 +63,64 @@ Useful requests include:
 
 The Markdown files in `/content` are the source of truth.
 
+## Frontmatter available in this site
+
+Quartz uses YAML frontmatter at the top of Markdown files to control page metadata, publishing behavior, comments, table of contents behavior, aliases, CSS classes, and social previews.
+
+This site uses the full visible starter pattern for regular notes:
+
+```yaml
+---
+created: 2026-06-09
+updated: 2026-06-09
+description: Short page description.
+title: Page Title
+publish: true
+draft: false
+comments: false
+enableToc: true
+quartz-properties: true
+quartz-properties-collapse: false
+lang: en
+permalink: null
+aliases: []
+cssclasses: []
+socialDescription: null
+socialImage: null
+published: 2026-06-09
+tags:
+  - Quartz
+  - Obsidian
+---
+```
+
+Known fields used by this starter site:
+
+| Field | Purpose |
+|---|---|
+| `created` | Creation date for the note. |
+| `updated` | Last updated date. This stays second for Obsidian date plugins. |
+| `description` | Page description for metadata, previews, and search. |
+| `title` | Page title. |
+| `publish` | Marks a page as publishable when explicit publishing is enabled. |
+| `draft` | Pages with `draft: true` are removed by the drafts filter. |
+| `comments` | Enables or disables comments when a comments provider is configured. |
+| `enableToc` | Enables or disables the table of contents for the page. |
+| `quartz-properties` | Controls whether the note properties panel is shown. |
+| `quartz-properties-collapse` | Controls whether the note properties panel starts collapsed. |
+| `lang` | Language code for the page. |
+| `permalink` | Custom URL path for non-homepage pages. |
+| `aliases` | Alternate names for link resolution. |
+| `cssclasses` | Page-specific CSS classes. |
+| `socialDescription` | Optional social-preview-specific description. |
+| `socialImage` | Optional social preview image. |
+| `published` | Publication date. |
+| `tags` | Page tags. |
+
+Homepage rule: `content/index.md` already becomes the site root, so the homepage should omit `permalink` entirely. Do not use `permalink: /` on the homepage.
+
+For the full reference, see [[Quartz Guide/Frontmatter Reference]].
+
 ## Publishing
 
 When changes are pushed to GitHub, GitHub Actions builds the Quartz site and GitHub Pages publishes the updated website.
