@@ -13,9 +13,6 @@ lang: en
 aliases:
   - Quartz Frontmatter
   - Frontmatter Guide
-cssclasses: []
-socialDescription: null
-socialImage: null
 published: 2026-06-09
 tags:
   - Quartz
@@ -42,10 +39,6 @@ enableToc: true
 quartz-properties: true
 quartz-properties-collapse: false
 lang: en
-aliases: []
-cssclasses: []
-socialDescription: null
-socialImage: null
 published: 2026-06-09
 tags:
   - Quartz
@@ -53,14 +46,39 @@ tags:
 ---
 ```
 
+## Set-only optional fields
+
+Optional fields should appear only when they have real values.
+
+Use fields like these only when needed:
+
+```yaml
+aliases:
+  - Alternate Name
+cssclasses:
+  - landing-page
+socialDescription: A custom social preview description.
+socialImage: /Attachments/social-card.png
+permalink: /about
+```
+
 ## What not to include by default
 
-Do not include placeholder permalink fields in standard generated frontmatter.
+Do not include placeholder fields in standard generated frontmatter.
 
 Do not use:
 
 ```yaml
 permalink: null
+socialImage: null
+socialDescription: null
+```
+
+Do not use empty optional arrays:
+
+```yaml
+aliases: []
+cssclasses: []
 ```
 
 Do not use:
@@ -115,10 +133,10 @@ This keeps the page visually cleaner by hiding the note-properties panel and dis
 | `quartz-properties` | Controls whether the note properties panel is shown. |
 | `quartz-properties-collapse` | Controls whether the note properties panel starts collapsed. |
 | `lang` | Language code for the page. |
-| `aliases` | Alternate names for link resolution. |
-| `cssclasses` | Page-specific CSS classes. |
-| `socialDescription` | Optional social-preview-specific description. |
-| `socialImage` | Optional social preview image. |
 | `published` | Publication date. |
 | `tags` | Page tags. |
-| `permalink` | Optional custom URL path. Omit it unless a real custom path is needed. |
+| `aliases` | Optional alternate names for link resolution. Omit unless set. |
+| `cssclasses` | Optional page-specific CSS classes. Omit unless set. |
+| `socialDescription` | Optional social-preview-specific description. Omit unless set. |
+| `socialImage` | Optional social preview image. Omit unless set. |
+| `permalink` | Optional custom URL path. Omit unless a real custom path is needed. |
