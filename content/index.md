@@ -14,7 +14,7 @@ tags:
   - Instructions
 ---
 
-<img class="site-banner" src="/quartz5-obsidian-test/static/quartz5-obsidian-test-banner.svg" alt="quartz5-obsidian-test banner">
+<img class="site-banner" src="static/quartz5-obsidian-test-banner.svg" alt="quartz5-obsidian-test banner">
 
 This site is a Quartz 5 GitHub Pages site generated from the `SolveSaint/quartz5-obsidian-test` repository.
 
