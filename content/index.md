@@ -17,7 +17,6 @@ aliases:
 cssclasses:
   - homepage
 socialDescription: A Quartz 5 website built from an Obsidian-compatible Markdown vault and published with GitHub Pages.
-socialImage: null
 published: 2026-06-09
 tags:
   - Quartz
@@ -80,10 +79,6 @@ enableToc: true
 quartz-properties: true
 quartz-properties-collapse: false
 lang: en
-aliases: []
-cssclasses: []
-socialDescription: null
-socialImage: null
 published: 2026-06-09
 tags:
   - Quartz
@@ -95,12 +90,27 @@ Important rules:
 
 - Keep `created` first and `updated` second so Obsidian date plugins can manage them predictably.
 - Put Quartz behavior fields such as `publish`, `draft`, `comments`, `enableToc`, and `quartz-properties` above `tags`.
+- Include only booleans or fields with real set values.
+- Do not include `null` placeholder fields.
+- Do not include empty optional fields such as `aliases: []` or `cssclasses: []`.
 - Do not include `permalink` in standard generated frontmatter.
 - Add `permalink` only when a page needs a real custom URL.
 - Never use `permalink: /` on `content/index.md`; the homepage already publishes at the site root.
 - Do not repeat the page title as a Markdown `# Heading` when Quartz already renders the page title from frontmatter.
 - Use `quartz-properties: false` on public landing pages when the properties panel would clutter the design.
 - Use `comments: false` unless comments are intentionally configured for the site.
+
+Optional fields should appear only when they have real values:
+
+```yaml
+aliases:
+  - Alternate Name
+cssclasses:
+  - landing-page
+socialDescription: A custom social preview description.
+socialImage: /Attachments/social-card.png
+permalink: /about
+```
 
 Known fields used by this starter site:
 
@@ -117,13 +127,13 @@ Known fields used by this starter site:
 | `quartz-properties` | Controls whether the note properties panel is shown. |
 | `quartz-properties-collapse` | Controls whether the note properties panel starts collapsed. |
 | `lang` | Language code for the page. |
-| `aliases` | Alternate names for link resolution. |
-| `cssclasses` | Page-specific CSS classes. |
-| `socialDescription` | Optional social-preview-specific description. |
-| `socialImage` | Optional social preview image. |
 | `published` | Publication date. |
 | `tags` | Page tags. |
-| `permalink` | Optional custom URL path. Omit it unless a custom path is needed. |
+| `aliases` | Optional alternate names for link resolution. Omit unless set. |
+| `cssclasses` | Optional page-specific CSS classes. Omit unless set. |
+| `socialDescription` | Optional social-preview-specific description. Omit unless set. |
+| `socialImage` | Optional social preview image. Omit unless set. |
+| `permalink` | Optional custom URL path. Omit unless a real custom path is needed. |
 
 For the full reference, see [[Quartz Guide/Frontmatter Reference]].
 
