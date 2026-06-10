@@ -10,7 +10,7 @@ enableToc: true
 quartz-properties: true
 quartz-properties-collapse: false
 lang: en
-permalink: /
+permalink: null
 aliases:
   - Home
   - Start Here
