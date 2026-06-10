@@ -16,7 +16,7 @@ tags:
   - Instructions
 ---
 
-<img class="site-banner" src="static/quartz5-obsidian-test-banner.svg" alt="quartz5-obsidian-test banner">
+<img class="site-banner" src="static/quartz5-obsidian-test-banner.png" alt="quartz5-obsidian-test banner">
 
 # Welcome to your Quartz 5 site running on SolveSaint/quartz5-obsidian-test
 
