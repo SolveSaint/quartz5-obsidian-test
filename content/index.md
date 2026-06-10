@@ -1,7 +1,7 @@
 ---
 created: 2026-06-09
 updated: 2026-06-09
-description: Instructions for editing, configuring, and deploying this Quartz 5 test site through the SolveSaint/quartz5-obsidian-test GitHub repository.
+description: A starter guide for editing and publishing the SolveSaint/quartz5-obsidian-test Quartz 5 site.
 title: Welcome to your Quartz 5 site running on SolveSaint/quartz5-obsidian-test
 draft: false
 enableToc: true
@@ -14,7 +14,7 @@ tags:
   - Instructions
 ---
 
-This Quartz 5 site is running from the `SolveSaint/quartz5-obsidian-test` GitHub repository.
+This site is a Quartz 5 GitHub Pages site generated from the `SolveSaint/quartz5-obsidian-test` repository.
 
 Live site:
 
@@ -28,62 +28,25 @@ Repository:
 https://github.com/SolveSaint/quartz5-obsidian-test
 ```
 
-## Operating rule
+## What this site is
 
-Build the site in phases. Do not mix bootstrap, deployment, content, styling, and layout changes in the same step.
+Quartz turns Markdown notes into a linked, searchable static website. Write notes in Markdown, keep them in the `content/` folder, and publish changes through GitHub.
 
-The safe sequence is:
+## Editing notes
 
-1. Bootstrap Quartz 5 into the wiped repository.
-2. Set the baseline configuration.
-3. Remove the temporary bootstrap workflow.
-4. Add the deploy workflow.
-5. Verify GitHub Pages deployment.
-6. Add content and customization in small commits.
+Edit Markdown files inside `content/`. Each Markdown file becomes a page if it is not removed by filters.
 
-## Baseline configuration
+Folders help organize files, but folders are not pages by themselves. Links between notes create the real site structure.
 
-The required project-page base URL is:
+## Publishing changes
 
-```yaml
-baseUrl: SolveSaint.github.io/quartz5-obsidian-test
-```
+Commit changes to the `main` branch. GitHub Actions rebuilds the site and publishes the updated version to GitHub Pages.
 
-The top-left site title is controlled by `configuration.pageTitle` in `quartz.config.yaml`. It should match the repository/site name:
+After a publish, check the live site and confirm that new pages, internal links, search, and navigation work under `/quartz5-obsidian-test/`.
 
-```yaml
-pageTitle: quartz5-obsidian-test
-```
+## Basic frontmatter pattern
 
-Set `baseUrl` and `pageTitle` together during the baseline configuration step.
-
-## Deployment workflow
-
-The deployment workflow should be the only permanent GitHub Actions workflow unless a specific new workflow is intentionally added.
-
-The deploy workflow should:
-
-1. Check out the repository.
-2. Use Node 24.
-3. Run `npm ci`.
-4. Run `npx quartz plugin install`.
-5. Run `npx quartz build`.
-6. Upload the `public` folder.
-7. Deploy to GitHub Pages.
-
-Temporary bootstrap workflows should be removed after they succeed.
-
-## Content rules
-
-Pages live in the `content/` folder. Folders organize notes, but folders are not pages by themselves. Links create structure.
-
-Keep starter content simple until the deploy is verified. Do not add layout experiments, CSS experiments, or plugin changes during the install phase.
-
-## Frontmatter rules
-
-Use only fields with actual values. Do not include null placeholders, empty arrays, or unused optional fields.
-
-Good pattern:
+Use only fields with actual values. Do not add empty placeholders or null fields.
 
 ```yaml
 ---
@@ -101,7 +64,7 @@ tags:
 ---
 ```
 
-Avoid:
+Avoid unset optional fields such as:
 
 ```yaml
 aliases: []
@@ -113,27 +76,13 @@ permalink: null
 
 Do not put `permalink: /` on the homepage. Quartz already treats `content/index.md` as the site root.
 
-## Editing workflow
+## Adding content
 
-Edit Markdown files in `content/`. Commit changes to `main`. GitHub Actions will rebuild and publish the site.
+Start with small changes:
 
-After any change, verify:
+1. Add one note.
+2. Link it from another note.
+3. Commit and publish.
+4. Verify the live page.
 
-1. The GitHub Actions deploy run completes successfully.
-2. The live site loads.
-3. Internal links work under `/quartz5-obsidian-test/`.
-4. The left site title still reads `quartz5-obsidian-test`.
-
-## Debugging rule
-
-When something breaks, inspect before patching:
-
-1. Read the workflow file.
-2. Read the workflow logs.
-3. Read `quartz.config.yaml`.
-4. Read the affected content file.
-5. Compare with Quartz 5 documentation.
-6. Apply one small fix.
-7. Verify the result.
-
-Repository state is authoritative. Do not assume Quartz 4 behavior on this Quartz 5 site.
+That keeps the site easy to debug as it grows.
