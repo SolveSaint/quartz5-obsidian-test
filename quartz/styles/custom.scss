@@ -1,9 +1,20 @@
 @use "./variables.scss" as *;
 
+.homepage .article-title,
+.homepage .content-meta,
+.homepage article > h1:first-child {
+  display: none;
+}
+
 .site-banner {
   display: block;
   width: 100%;
   height: auto;
-  margin-bottom: 2rem;
+  margin: 0 0 1.5rem 0;
   border-radius: 16px;
+  background: #080812;
+}
+
+.homepage .site-banner + h1 {
+  margin-top: 0;
 }
